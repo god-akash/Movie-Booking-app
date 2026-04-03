@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CineBook | Premium Cinema & Events</title>
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@700;800;900&family=Manrope:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+  <style>
+    /* ════════════════════════════════════════════════
+       RESET & BASE
+    ════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:              #0f0d16;
+      --surface:         #0f0d16;
+      --surface-low:     #14121c;
+      --surface-card:    rgba(39,36,49,0.4);
+      --surface-high:    #211e2a;
+      --surface-highest: #272431;
+      --on-surface:      #f5eefc;
+      --on-surface-var:  #aea9b6;
+      --outline-var:     #494651;
+      --outline:         #78737f;
+      --primary:         #b6a0ff;
+      --primary-dim:     #7e51ff;
+      --secondary:       #00e3fd;
+      --secondary-dim:   #00d4ec;
+      --tertiary:        #ff6c95;
+      --error:           #ff6e84;
+      --grad:            linear-gradient(135deg, #7e51ff, #00d4ec);
+      --font-head:       'Epilogue', sans-serif;
+      --font-body:       'Manrope', sans-serif;
+      --font-label:      'Plus Jakarta Sans', sans-serif;
+      --nav-h:           72px;   /* bottom nav height */
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      min-height: 100dvh;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: inherit; }
+    img { display: block; }
+
+    /* hide scrollbar but keep scroll */
+    .no-scroll::-webkit-scrollbar { display: none; }
+    .no-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ════════════════════════════════════════════════
+       GLASS UTILITY
+    ════════════════════════════════════════════════ */
+    .glass {
+      background: var(--surface-card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(73,70,81,0.15);
+    }
+
+    /* ════════════════════════════════════════════════
+       TOP NAV BAR
+       ↳ links: logo → home.html | search | notifications
+                profile → profile.html
+    ════════════════════════════════════════════════ */
+    .top-nav {
+      position: sticky;
+      top: 0; z-index: 100;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 20px;
+      background: linear-gradient(to bottom, #14121c 60%, transparent);
+    }
+
+    /* Logo */
+    .nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      flex-shrink: 0;
+    }
+    .nav-logo .material-symbols-outlined { color: var(--primary-dim); font-size: 22px; }
+    .nav-logo-text {
+      font-family: var(--font-head);
+      font-size: 22px; font-weight: 900;
+      font-style: italic;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    /* Search bar (desktop) */
+    .nav-search {
+      flex: 1; max-width: 400px;
+      display: none; /* shown via media query */
+      position: relative;
+    }
+    .nav-search input {
+      width: 100%;
+      background: var(--surface-high);
+      border: none; outline: none;
+      border-radius: 9999px;
+      padding: 10px 16px 10px 44px;
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: 13px;
+      transition: box-shadow 0.2s;
+    }
+    .nav-search input:focus { box-shadow: 0 0 0 2px var(--primary-dim); }
+    .nav-search input::placeholder { color: rgba(174,169,182,0.5); }
+    .nav-search .material-symbols-outlined {
+      position: absolute; left: 14px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--on-surface-var); font-size: 18px; pointer-events: none;
+    }
+
+    /* Nav right icons */
+    .nav-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    .nav-icon-btn {
+      background: none; border: none;
+      color: var(--on-surface);
+      transition: color 0.2s;
+      display: flex; align-items: center;
+    }
+    .nav-icon-btn:hover { color: var(--secondary); }
+    .nav-icon-btn .material-symbols-outlined { font-size: 24px; }
+
+    /* User avatar */
+    .nav-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 2px solid rgba(126,81,255,0.35);
+      overflow: hidden; cursor: pointer;
+    }
+    .nav-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .nav-avatar-placeholder {
+      width: 100%; height: 100%;
+      background: var(--grad);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 14px; font-weight: 700;
+      font-family: var(--font-label);
+    }
+
+    /* ════════════════════════════════════════════════
+       MAIN CONTENT
+    ════════════════════════════════════════════════ */
+    main { padding-bottom: calc(var(--nav-h) + 20px); }
+
+    /* ════════════════════════════════════════════════
+       HERO SLIDER
+       ↳ data comes from GET /api/movies/featured
+         admin uploads poster, title, genre, rating
+    ════════════════════════════════════════════════ */
+    .hero-section {
+      position: relative;
+      width: 100%; height: 580px;
+      min-height: 460px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    /* slides container */
+    .hero-slides {
+      display: flex;
+      height: 100%;
+      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+    .hero-slide {
+      min-width: 100%; height: 100%;
+      position: relative; flex-shrink: 0;
+    }
+    .hero-slide img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    /* gradient overlays */
+    .hero-slide::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to top,  #0f0d16 0%, rgba(15,13,22,0.15) 55%, transparent 100%),
+        linear-gradient(to right, #0f0d16 0%, transparent 60%);
+    }
+
+    /* slide content */
+    .hero-content {
+      position: absolute; bottom: 0; left: 0;
+      z-index: 2;
+      padding: 0 24px 40px;
+      max-width: 560px;
+    }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .hero-chip {
+      background: rgba(0,104,117,0.75);
+      backdrop-filter: blur(8px);
+      color: #e8fbff;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-family: var(--font-label);
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .hero-chip.rating {
+      background: rgba(39,36,49,0.7);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .hero-chip.rating .material-symbols-outlined {
+      font-size: 13px; color: #facc15;
+      font-variation-settings: 'FILL' 1;
+    }
+
+    .hero-title {
+      font-family: var(--font-head);
+      font-size: clamp(32px, 7vw, 62px);
+      font-weight: 900; line-height: 1.05;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+    }
+    .hero-title .accent {
+      color: var(--secondary-dim);
+      text-shadow: 0 0 12px rgba(0,212,236,0.5);
+    }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn-book-now {
+      background: var(--grad);
+      border: none; border-radius: 9999px;
+      padding: 14px 28px;
+      color: #000; font-family: var(--font-label);
+      font-size: 14px; font-weight: 800;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      box-shadow: 0 0 20px rgba(126,81,255,0.4);
+      display: flex; align-items: center; gap: 8px;
+      transition: filter 0.2s, transform 0.1s;
+    }
+    .btn-book-now:hover { filter: brightness(1.1); }
+    .btn-book-now:active { transform: scale(0.97); }
+    .btn-book-now .material-symbols-outlined { font-size: 18px; }
+
+    .btn-trailer {
+      background: var(--surface-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(73,70,81,0.2);
+      border-radius: 9999px;
+      padding: 14px 28px;
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: 14px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      display: flex; align-items: center; gap: 8px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-trailer:hover { background: rgba(39,36,49,0.7); }
+    .btn-trailer:active { transform: scale(0.97); }
+    .btn-trailer .material-symbols-outlined { font-size: 20px; }
+
+    /* slide dots */
+    .hero-dots {
+      position: absolute; bottom: 16px; right: 24px;
+      z-index: 3;
+      display: flex; gap: 6px; align-items: center;
+    }
+    .hero-dot {
+      width: 6px; height: 6px; border-radius: 9999px;
+      background: rgba(245,238,252,0.3);
+      border: none;
+      transition: width 0.3s, background 0.3s;
+      padding: 0;
+    }
+    .hero-dot.active {
+      width: 22px;
+      background: var(--secondary-dim);
+    }
+
+    /* hero skeleton */
+    .hero-skeleton {
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, #1b1823 25%, #272431 50%, #1b1823 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    /* ════════════════════════════════════════════════
+       FILTER CHIPS
+    ════════════════════════════════════════════════ */
+    .filter-section {
+      padding: 0 20px;
+      margin-bottom: 28px;
+      overflow-x: auto;
+      display: flex; gap: 10px; align-items: center;
+    }
+    .filter-section::-webkit-scrollbar { display: none; }
+    .filter-chip {
+      white-space: nowrap;
+      border-radius: 12px;
+      padding: 9px 20px;
+      font-family: var(--font-label);
+      font-size: 13px; font-weight: 700;
+      border: 1px solid rgba(73,70,81,0.3);
+      background: var(--surface-card);
+      color: var(--on-surface-var);
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .filter-chip:hover { color: var(--on-surface); }
+    .filter-chip.active {
+      background: var(--grad);
+      border-color: transparent;
+      color: #000;
+      box-shadow: 0 4px 14px rgba(126,81,255,0.3);
+    }
+
+    /* ════════════════════════════════════════════════
+       SECTION HEADER
+    ════════════════════════════════════════════════ */
+    .section-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-end; padding: 0 20px;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: var(--font-head);
+      font-size: 22px; font-weight: 800;
+    }
+    .section-sub {
+      font-family: var(--font-body);
+      font-size: 13px; color: var(--on-surface-var);
+      margin-top: 2px;
+    }
+    .view-all-btn {
+      background: none; border: none;
+      color: var(--secondary-dim);
+      font-family: var(--font-label);
+      font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; gap: 2px;
+      transition: opacity 0.2s; flex-shrink: 0;
+    }
+    .view-all-btn:hover { opacity: 0.75; }
+    .view-all-btn .material-symbols-outlined { font-size: 16px; }
+
+    /* ════════════════════════════════════════════════
+       NOW SHOWING  –  horizontal scroll cards
+       ↳ data: GET /api/movies?status=now_showing
+         fields: poster_url, title, genres, price, rating
+    ════════════════════════════════════════════════ */
+    .now-showing { margin-bottom: 40px; }
+
+    .movies-scroll {
+      display: flex;
+      overflow-x: auto;
+      gap: 16px;
+      padding: 0 20px 8px;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      /* edge fade */
+      -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 94%, transparent);
+      mask-image: linear-gradient(to right, transparent, black 4%, black 94%, transparent);
+    }
+    .movies-scroll::-webkit-scrollbar { display: none; }
+
+    /* movie card */
+    .movie-card {
+      min-width: 168px; flex-shrink: 0;
+      cursor: pointer;
+    }
+    .movie-poster {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      aspect-ratio: 2/3;
+      margin-bottom: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      transition: transform 0.3s ease;
+    }
+    .movie-card:hover .movie-poster { transform: scale(1.03); }
+    .movie-poster img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .movie-price-badge {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px 12px 10px;
+      background: linear-gradient(to top, rgba(15,13,22,0.9), transparent);
+      font-family: var(--font-label);
+      font-size: 13px; font-weight: 700;
+      color: var(--secondary-dim);
+    }
+    .movie-title {
+      font-weight: 700; font-size: 14px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+    .movie-genre {
+      font-size: 11px; color: var(--on-surface-var);
+      margin-bottom: 6px;
+    }
+    .stars { display: flex; gap: 2px; }
+    .stars .material-symbols-outlined {
+      font-size: 12px; color: #facc15;
+      font-variation-settings: 'FILL' 1;
+    }
+    .stars .material-symbols-outlined.empty {
+      color: rgba(174,169,182,0.35);
+      font-variation-settings: 'FILL' 0;
+    }
+
+    /* skeleton card */
+    .skeleton-card {
+      min-width: 168px; flex-shrink: 0;
+    }
+    .skeleton-poster {
+      width: 100%; aspect-ratio: 2/3;
+      border-radius: 18px; overflow: hidden;
+    }
+    .skeleton-box {
+      background: linear-gradient(90deg, #1b1823 25%, #272431 50%, #1b1823 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 8px;
+    }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    /* ════════════════════════════════════════════════
+       UPCOMING EVENTS  –  bento grid
+       ↳ data: GET /api/events?status=upcoming
+         fields: banner_url, title, type, date, venue, price
+    ════════════════════════════════════════════════ */
+    .events-section { margin-bottom: 40px; padding: 0 20px; }
+
+    .events-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    /* large featured event card */
+    .event-card-large {
+      position: relative;
+      border-radius: 28px;
+      overflow: hidden;
+      min-height: 280px;
+      cursor: pointer;
+    }
+    .event-card-large img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      position: absolute; inset: 0;
+      transition: transform 0.5s ease;
+    }
+    .event-card-large:hover img { transform: scale(1.06); }
+    .event-card-large::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(15,13,22,0.9) 0%, rgba(15,13,22,0.2) 60%, transparent 100%);
+    }
+    .event-date-badge {
+      position: absolute; top: 20px; left: 20px;
+      z-index: 2;
+      background: rgba(126,81,255,0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 8px 14px;
+      text-align: center;
+      line-height: 1.2;
+    }
+    .event-date-badge .day {
+      display: block; font-size: 20px; font-weight: 700;
+      font-family: var(--font-head); color: #fff;
+    }
+    .event-date-badge .month {
+      display: block; font-size: 10px; font-weight: 700;
+      font-family: var(--font-label);
+      text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.8);
+    }
+    .event-card-content {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      z-index: 2; padding: 20px 22px;
+    }
+    .event-type-label {
+      font-family: var(--font-label);
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.15em;
+      color: var(--secondary-dim); margin-bottom: 6px;
+    }
+    .event-title {
+      font-family: var(--font-head);
+      font-size: 22px; font-weight: 900;
+      margin-bottom: 10px;
+    }
+    .event-meta {
+      display: flex; flex-wrap: wrap; gap: 14px;
+      font-size: 13px; color: var(--on-surface-var);
+    }
+    .event-meta span {
+      display: flex; align-items: center; gap: 5px;
+    }
+    .event-meta .material-symbols-outlined { font-size: 14px; }
+
+    /* small event card */
+    .event-card-small {
+      background: var(--surface-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(73,70,81,0.15);
+      border-radius: 28px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      min-height: 180px;
+    }
+    .event-card-small:hover { border-color: rgba(126,81,255,0.45); }
+    .event-icon-box {
+      width: 44px; height: 44px;
+      background: var(--surface-highest);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+    .event-icon-box .material-symbols-outlined { color: var(--primary-dim); font-size: 22px; }
+    .event-card-small .event-title {
+      font-size: 17px; margin-bottom: 6px;
+    }
+    .event-desc {
+      font-size: 13px; color: var(--on-surface-var);
+      display: -webkit-box;
+      -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .event-footer {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-top: 16px;
+    }
+    .event-price {
+      font-family: var(--font-label); font-size: 15px; font-weight: 700;
+    }
+    .event-arrow {
+      background: none; border: none;
+      color: var(--secondary-dim);
+      display: flex; align-items: center;
+      transition: transform 0.2s;
+    }
+    .event-card-small:hover .event-arrow { transform: translateX(4px); }
+    .event-arrow .material-symbols-outlined { font-size: 22px; }
+
+    /* wide event row card */
+    .event-card-row {
+      background: var(--surface-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(73,70,81,0.12);
+      border-radius: 28px;
+      padding: 20px;
+      display: flex; align-items: center; gap: 16px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .event-card-row:hover { border-color: rgba(126,81,255,0.3); }
+    .event-card-row-img {
+      width: 120px; height: 80px;
+      border-radius: 16px; overflow: hidden;
+      flex-shrink: 0; display: none; /* shown on sm+ */
+    }
+    .event-card-row-img img { width: 100%; height: 100%; object-fit: cover; }
+    .event-card-row-body { flex: 1; }
+    .event-card-row-type {
+      font-family: var(--font-label); font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.15em;
+      color: var(--primary-dim); margin-bottom: 4px;
+    }
+    .event-card-row-title {
+      font-family: var(--font-head); font-size: 17px; font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .event-card-row-meta {
+      display: flex; gap: 14px; font-size: 12px; color: var(--on-surface-var);
+    }
+    .event-card-row-meta span {
+      display: flex; align-items: center; gap: 4px;
+    }
+    .event-card-row-meta .material-symbols-outlined { font-size: 13px; }
+    .event-card-row-action {
+      flex-shrink: 0;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--surface-highest);
+      border: none; color: var(--on-surface);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, color 0.2s;
+    }
+    .event-card-row:hover .event-card-row-action {
+      background: var(--primary-dim); color: #fff;
+    }
+    .event-card-row-action .material-symbols-outlined { font-size: 20px; }
+
+    /* ════════════════════════════════════════════════
+       TRENDING
+       ↳ data: GET /api/movies/trending
+    ════════════════════════════════════════════════ */
+    .trending-section { margin-bottom: 40px; padding: 0 20px; }
+
+    .trending-list { display: flex; flex-direction: column; gap: 10px; }
+    .trending-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: var(--surface-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .trending-item:hover { border-color: rgba(126,81,255,0.2); }
+    .trending-rank {
+      font-family: var(--font-head);
+      font-size: 32px; font-weight: 900;
+      color: rgba(73,70,81,0.35);
+      font-style: italic;
+      width: 36px; text-align: center; flex-shrink: 0;
+    }
+    .trending-thumb {
+      width: 56px; height: 56px;
+      border-radius: 12px; overflow: hidden; flex-shrink: 0;
+    }
+    .trending-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .trending-info { flex: 1; }
+    .trending-title { font-weight: 700; font-size: 15px; margin-bottom: 3px; }
+    .trending-meta { font-size: 12px; color: var(--on-surface-var); }
+    .trending-badge { flex-shrink: 0; text-align: right; }
+    .trending-badge .material-symbols-outlined { font-size: 20px; }
+    .trend-up   { color: var(--secondary-dim); }
+    .trend-flat { color: rgba(174,169,182,0.4); }
+    .trend-down { color: var(--error); }
+    .top-rated-label {
+      font-family: var(--font-label); font-size: 9px; font-weight: 700;
+      color: var(--secondary-dim); text-transform: uppercase; letter-spacing: 0.1em;
+    }
+
+    /* ════════════════════════════════════════════════
+       EMPTY / ERROR STATE
+    ════════════════════════════════════════════════ */
+    .empty-state {
+      text-align: center; padding: 32px 20px;
+      color: var(--on-surface-var);
+      font-family: var(--font-label); font-size: 13px;
+    }
+    .empty-state .material-symbols-outlined { font-size: 40px; margin-bottom: 8px; display: block; }
+
+    /* ════════════════════════════════════════════════
+       BOTTOM NAV
+       ↳ Movies → home.html (ACTIVE)
+       ↳ Tickets → tickets.html
+       ↳ Search  → search.html
+       ↳ Profile → profile.html
+    ════════════════════════════════════════════════ */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 100;
+      height: var(--nav-h);
+      background: rgba(20,18,28,0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(73,70,81,0.2);
+      border-radius: 24px 24px 0 0;
+      display: flex; justify-content: space-around; align-items: center;
+      padding: 0 8px;
+      box-shadow: 0 -10px 40px rgba(126,81,255,0.1);
+    }
+
+    /* each nav item */
+    .nav-item {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 3px; padding: 8px 16px;
+      color: rgba(245,238,252,0.45);
+      transition: color 0.2s, transform 0.2s;
+      border-radius: 12px; flex: 1;
+    }
+    .nav-item:hover { color: var(--primary-dim); }
+
+    /* ACTIVE nav item */
+    .nav-item.active {
+      color: var(--secondary-dim);
+      filter: drop-shadow(0 0 8px rgba(0,212,236,0.5));
+      transform: scale(1.08);
+    }
+    .nav-item .material-symbols-outlined { font-size: 24px; }
+    .nav-item.active .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1;
+    }
+    .nav-label {
+      font-family: var(--font-label);
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+    }
+
+    /* ════════════════════════════════════════════════
+       FAB  (add / quick book)
+    ════════════════════════════════════════════════ */
+    .fab {
+      position: fixed; right: 20px;
+      bottom: calc(var(--nav-h) + 16px);
+      width: 56px; height: 56px;
+      background: var(--grad);
+      border: none; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; z-index: 99;
+      box-shadow: 0 6px 20px rgba(126,81,255,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .fab:hover { transform: scale(1.08); box-shadow: 0 8px 28px rgba(126,81,255,0.55); }
+    .fab:active { transform: scale(0.95); }
+    .fab .material-symbols-outlined { font-size: 26px; }
+
+    /* ════════════════════════════════════════════════
+       TOAST NOTIFICATION
+    ════════════════════════════════════════════════ */
+    .toast {
+      position: fixed; bottom: calc(var(--nav-h) + 80px); left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--surface-high);
+      border: 1px solid rgba(73,70,81,0.3);
+      border-radius: 12px; padding: 10px 18px;
+      font-family: var(--font-label); font-size: 13px; font-weight: 600;
+      color: var(--on-surface); opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 200; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ════════════════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════════════════ */
+    @media (min-width: 640px) {
+      .nav-search { display: block; }
+      .movie-card { min-width: 190px; }
+      .events-grid { grid-template-columns: 1fr 1fr; }
+      .event-card-large { grid-column: 1 / -1; }
+      .event-card-row-img { display: block; }
+      .event-card-row { grid-column: 1 / -1; }
+    }
+    @media (min-width: 900px) {
+      .events-grid { grid-template-columns: 2fr 1fr 1fr; }
+      .event-card-large { grid-column: 1 / 2; grid-row: 1 / 3; }
+      .event-card-row { grid-column: 1 / -1; }
+      .hero-section { height: 620px; }
+    }
+    @media (max-width: 400px) {
+      .hero-title { font-size: 28px; }
+      .movie-card { min-width: 145px; }
+      .btn-book-now, .btn-trailer { padding: 11px 20px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════
+       TOP NAVIGATION BAR
+  ══════════════════════════════════════ -->
+  <header class="top-nav">
+    <!-- Logo → home.html -->
+    <a class="nav-logo" href="home.html">
+      <span class="material-symbols-outlined">movie_filter</span>
+      <span class="nav-logo-text">CineBook</span>
+    </a>
+
+    <!-- Search bar (desktop only) -->
+    <div class="nav-search">
+      <span class="material-symbols-outlined">search</span>
+      <input type="text" id="searchInput" placeholder="Search movies, events, venues..." />
+    </div>
+
+    <!-- Right icons -->
+    <div class="nav-right">
+      <!-- Notifications → notifications.html -->
+      <button class="nav-icon-btn" onclick="window.location.href='notifications.html'" aria-label="Notifications">
+        <span class="material-symbols-outlined">notifications</span>
+      </button>
+      <!-- User avatar → profile.html -->
+      <div class="nav-avatar" onclick="window.location.href='profile.html'" id="navAvatar">
+        <div class="nav-avatar-placeholder" id="avatarInitials">?</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════ -->
+  <main>
+
+    <!-- ── HERO SLIDER ──────────────────────
+         API: GET /api/movies/featured
+         Admin uploads: poster, title, genres,
+         rating, trailer_url
+    ──────────────────────────────────────── -->
+    <section class="hero-section" id="heroSection">
+      <!-- loading skeleton -->
+      <div class="hero-skeleton" id="heroSkeleton"></div>
+
+      <!-- slides injected by JS -->
+      <div class="hero-slides" id="heroSlides"></div>
+
+      <!-- dot indicators -->
+      <div class="hero-dots" id="heroDots"></div>
+    </section>
+
+    <!-- ── FILTER CHIPS ───────────────────── -->
+    <section class="filter-section" id="filterSection">
+      <button class="filter-chip active" data-filter="all">All</button>
+      <button class="filter-chip" data-filter="movies">Movies</button>
+      <button class="filter-chip" data-filter="concerts">Concerts</button>
+      <button class="filter-chip" data-filter="sports">Sports</button>
+      <button class="filter-chip" data-filter="theatre">Theatre</button>
+    </section>
+
+    <!-- ── NOW SHOWING ────────────────────────
+         API: GET /api/movies?status=now_showing
+         Admin adds: title, genres, poster_url,
+         price, rating, release_date
+    ──────────────────────────────────────── -->
+    <section class="now-showing">
+      <div class="section-header">
+        <div>
+          <h3 class="section-title">Now Showing</h3>
+          <p class="section-sub">Exclusive screenings in your city</p>
+        </div>
+        <!-- View all → movies.html -->
+        <button class="view-all-btn" onclick="window.location.href='movies.html'">
+          View All <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
+      <div class="movies-scroll" id="nowShowingRow">
+        <!-- skeletons while loading -->
+        <div class="skeleton-card"><div class="skeleton-poster skeleton-box"></div></div>
+        <div class="skeleton-card"><div class="skeleton-poster skeleton-box"></div></div>
+        <div class="skeleton-card"><div class="skeleton-poster skeleton-box"></div></div>
+        <div class="skeleton-card"><div class="skeleton-poster skeleton-box"></div></div>
+      </div>
+    </section>
+
+    <!-- ── UPCOMING EVENTS ────────────────────
+         API: GET /api/events?status=upcoming
+         Admin adds: title, type, banner_url,
+         date, venue, price, description
+    ──────────────────────────────────────── -->
+    <section class="events-section">
+      <div class="section-header" style="padding:0;margin-bottom:16px;">
+        <div>
+          <h3 class="section-title">Upcoming Events</h3>
+          <p class="section-sub">Concerts, workshops, and more</p>
+        </div>
+        <!-- View all → events.html -->
+        <button class="view-all-btn" onclick="window.location.href='events.html'">
+          View All <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
+      <div class="events-grid" id="eventsGrid">
+        <!-- injected by JS -->
+        <div class="skeleton-card" style="min-height:280px;border-radius:28px;"><div class="skeleton-box" style="height:100%;border-radius:28px;"></div></div>
+        <div class="skeleton-card"><div class="skeleton-box" style="height:180px;border-radius:28px;"></div></div>
+        <div class="skeleton-card"><div class="skeleton-box" style="height:180px;border-radius:28px;"></div></div>
+      </div>
+    </section>
+
+    <!-- ── TRENDING THIS WEEK ─────────────────
+         API: GET /api/movies/trending
+    ──────────────────────────────────────── -->
+    <section class="trending-section">
+      <div class="section-header" style="padding:0;margin-bottom:16px;">
+        <h3 class="section-title">Trending This Week</h3>
+      </div>
+      <div class="trending-list" id="trendingList">
+        <!-- injected by JS -->
+        <div class="skeleton-card"><div class="skeleton-box" style="height:72px;border-radius:18px;"></div></div>
+        <div class="skeleton-card"><div class="skeleton-box" style="height:72px;border-radius:18px;margin-top:10px;"></div></div>
+        <div class="skeleton-card"><div class="skeleton-box" style="height:72px;border-radius:18px;margin-top:10px;"></div></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════════════════════
+       BOTTOM NAVIGATION
+       Active page: Movies (home)
+  ══════════════════════════════════════ -->
+  <nav class="bottom-nav">
+    <!-- Movies → home.html  [ACTIVE] -->
+    <a class="nav-item active" href="home.html">
+      <span class="material-symbols-outlined">movie</span>
+      <span class="nav-label">Movies</span>
+    </a>
+    <!-- Tickets → tickets.html -->
+    <a class="nav-item" href="tickets.html">
+      <span class="material-symbols-outlined">confirmation_number</span>
+      <span class="nav-label">Tickets</span>
+    </a>
+    <!-- Search → search.html -->
+    <a class="nav-item" href="search.html">
+      <span class="material-symbols-outlined">search</span>
+      <span class="nav-label">Search</span>
+    </a>
+    <!-- Profile → profile.html -->
+    <a class="nav-item" href="profile.html">
+      <span class="material-symbols-outlined">person</span>
+      <span class="nav-label">Profile</span>
+    </a>
+  </nav>
+
+  <!-- FAB → quick book / add -->
+  <button class="fab" onclick="window.location.href='movies.html'" aria-label="Browse Movies">
+    <span class="material-symbols-outlined">add_circle</span>
+  </button>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+
+  <!-- ══════════════════════════════════════
+       JAVASCRIPT — ALL DATA FROM BACKEND
+  ══════════════════════════════════════ -->
+  <script>
+    /* ─────────────────────────────────────────────────
+       CONFIG
+       Change API_BASE to your Node.js backend URL
+    ───────────────────────────────────────────────── */
+    const API_BASE = 'http://localhost:5000/api';
+
+    /* ── Auth helpers ─────────────────────────────── */
+    function getToken() { return localStorage.getItem('cinebook_token'); }
+    function getUser()  {
+      const u = localStorage.getItem('cinebook_user');
+      return u ? JSON.parse(u) : null;
+    }
+
+    /* redirect to login if not authenticated */
+    (function guardAuth() {
+      if (!getToken()) window.location.href = 'login.html';
+    })();
+
+    /* ── User avatar / initials in nav ───────────── */
+    (function loadUserAvatar() {
+      const user = getUser();
+      if (!user) return;
+      const el = document.getElementById('navAvatar');
+      if (user.avatar_url) {
+        el.innerHTML = `<img src="${user.avatar_url}" alt="${user.name}" />`;
+      } else {
+        const initials = (user.name || '?').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+        document.getElementById('avatarInitials').textContent = initials;
+      }
+    })();
+
+    /* ── Generic API fetch helper ─────────────────── */
+    async function apiFetch(endpoint) {
+      const res = await fetch(`${API_BASE}${endpoint}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getToken()}`
+        }
+      });
+      if (res.status === 401) { window.location.href = 'login.html'; return null; }
+      if (!res.ok) throw new Error(`API error ${res.status}`);
+      return res.json();
+    }
+
+    /* ── Toast helper ─────────────────────────────── */
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    /* ── Stars renderer ───────────────────────────── */
+    function renderStars(rating) {
+      /* rating 0–5, accepts decimal */
+      let html = '';
+      for (let i = 1; i <= 5; i++) {
+        html += `<span class="material-symbols-outlined ${i <= Math.round(rating) ? '' : 'empty'}">star</span>`;
+      }
+      return `<div class="stars">${html}</div>`;
+    }
+
+    /* ── Format date badge ────────────────────────── */
+    function formatDateBadge(dateStr) {
+      const d = new Date(dateStr);
+      return {
+        day:   d.getDate(),
+        month: d.toLocaleString('en', { month: 'short' }).toUpperCase()
+      };
+    }
+
+    /* ─────────────────────────────────────────────────
+       HERO SLIDER
+       GET /api/movies/featured
+       Expected: [{ id, title, genres[], rating, poster_url,
+                    banner_url, trailer_url, accent }]
+    ───────────────────────────────────────────────── */
+    let heroIndex   = 0;
+    let heroData    = [];
+    let heroTimer   = null;
+
+    async function loadHero() {
+      try {
+        const data = await apiFetch('/movies/featured');
+        if (!data || !data.length) { useFallbackHero(); return; }
+        heroData = data;
+        buildHeroSlides(data);
+      } catch (e) {
+        console.warn('Hero load failed:', e);
+        useFallbackHero();
+      }
+    }
+
+    function useFallbackHero() {
+      /* shown when backend is offline / no data yet */
+      document.getElementById('heroSkeleton').style.display = 'none';
+      document.getElementById('heroSlides').innerHTML = `
+        <div class="hero-slide" style="background:linear-gradient(135deg,#1b1823,#272431);display:flex;align-items:center;justify-content:center;">
+          <div style="text-align:center;color:var(--on-surface-var);">
+            <span class="material-symbols-outlined" style="font-size:48px;display:block;margin-bottom:12px;">movie_filter</span>
+            <p style="font-family:var(--font-label);font-size:14px;">No featured movies yet.<br/>Add some from the Admin panel.</p>
+          </div>
+        </div>`;
+    }
+
+    function buildHeroSlides(movies) {
+      document.getElementById('heroSkeleton').style.display = 'none';
+      const slidesEl = document.getElementById('heroSlides');
+      const dotsEl   = document.getElementById('heroDots');
+
+      slidesEl.innerHTML = movies.map((m, i) => `
+        <div class="hero-slide">
+          <img src="${m.banner_url || m.poster_url}" alt="${m.title}" loading="${i === 0 ? 'eager' : 'lazy'}" />
+          <div class="hero-content">
+            <div class="hero-chips">
+              ${(m.genres || []).map(g => `<span class="hero-chip">${g}</span>`).join('')}
+              <span class="hero-chip rating">
+                <span class="material-symbols-outlined">star</span>${(m.rating || 0).toFixed(1)}
+              </span>
+            </div>
+            <h2 class="hero-title">${escHtml(m.title)}</h2>
+            <div class="hero-actions">
+              <button class="btn-book-now" onclick="goToMovie(${m.id})">
+                BOOK NOW <span class="material-symbols-outlined">arrow_forward</span>
+              </button>
+              ${m.trailer_url ? `
+              <button class="btn-trailer" onclick="openTrailer('${m.trailer_url}')">
+                <span class="material-symbols-outlined">play_circle</span> TRAILER
+              </button>` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      dotsEl.innerHTML = movies.map((_, i) =>
+        `<button class="hero-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})" aria-label="Slide ${i+1}"></button>`
+      ).join('');
+
+      startHeroAuto();
+    }
+
+    function goToSlide(idx) {
+      heroIndex = idx;
+      document.getElementById('heroSlides').style.transform = `translateX(-${idx * 100}%)`;
+      document.querySelectorAll('.hero-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+
+    function startHeroAuto() {
+      clearInterval(heroTimer);
+      heroTimer = setInterval(() => {
+        heroIndex = (heroIndex + 1) % heroData.length;
+        goToSlide(heroIndex);
+      }, 5000); /* auto-advance every 5 seconds */
+    }
+
+    /* pause on hover */
+    document.getElementById('heroSection').addEventListener('mouseenter', () => clearInterval(heroTimer));
+    document.getElementById('heroSection').addEventListener('mouseleave', () => { if (heroData.length) startHeroAuto(); });
+
+    /* touch swipe on hero */
+    let touchStartX = 0;
+    document.getElementById('heroSection').addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    document.getElementById('heroSection').addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        heroIndex = diff > 0
+          ? Math.min(heroIndex + 1, heroData.length - 1)
+          : Math.max(heroIndex - 1, 0);
+        goToSlide(heroIndex);
+        startHeroAuto();
+      }
+    }, { passive: true });
+
+    /* ─────────────────────────────────────────────────
+       NOW SHOWING
+       GET /api/movies?status=now_showing
+       Expected: [{ id, title, genres[], poster_url,
+                    price, rating }]
+    ───────────────────────────────────────────────── */
+    async function loadNowShowing() {
+      try {
+        const data = await apiFetch('/movies?status=now_showing');
+        const row  = document.getElementById('nowShowingRow');
+
+        if (!data || !data.length) {
+          row.innerHTML = `<div class="empty-state">
+            <span class="material-symbols-outlined">movie</span>
+            No movies currently showing.
+          </div>`;
+          return;
+        }
+
+        row.innerHTML = data.map(m => `
+          <div class="movie-card" onclick="goToMovie(${m.id})">
+            <div class="movie-poster">
+              <img src="${m.poster_url}" alt="${escHtml(m.title)}" loading="lazy" />
+              <div class="movie-price-badge">₹${Number(m.price).toFixed(0)}</div>
+            </div>
+            <div class="movie-title">${escHtml(m.title)}</div>
+            <div class="movie-genre">${(m.genres || []).join(' • ')}</div>
+            ${renderStars(m.rating || 0)}
+          </div>
+        `).join('');
+
+      } catch (e) {
+        console.warn('Now showing load failed:', e);
+        document.getElementById('nowShowingRow').innerHTML =
+          `<div class="empty-state"><span class="material-symbols-outlined">error</span>Failed to load movies.</div>`;
+      }
+    }
+
+    /* ─────────────────────────────────────────────────
+       UPCOMING EVENTS
+       GET /api/events?status=upcoming
+       Expected: [{ id, title, type, banner_url,
+                    date, venue, price, description }]
+    ───────────────────────────────────────────────── */
+    async function loadEvents() {
+      try {
+        const data = await apiFetch('/events?status=upcoming');
+        const grid = document.getElementById('eventsGrid');
+
+        if (!data || !data.length) {
+          grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
+            <span class="material-symbols-outlined">event</span>No upcoming events.</div>`;
+          return;
+        }
+
+        const [featured, ...rest] = data;
+        const fb = formatDateBadge(featured.date);
+
+        let html = `
+          <!-- Featured large event -->
+          <div class="event-card-large" onclick="goToEvent(${featured.id})" style="grid-column:1/-1;">
+            <img src="${featured.banner_url}" alt="${escHtml(featured.title)}" loading="lazy" />
+            <div class="event-date-badge">
+              <span class="day">${fb.day}</span>
+              <span class="month">${fb.month}</span>
+            </div>
+            <div class="event-card-content">
+              <div class="event-type-label">${escHtml(featured.type || 'EVENT')}</div>
+              <div class="event-title">${escHtml(featured.title)}</div>
+              <div class="event-meta">
+                <span><span class="material-symbols-outlined">location_on</span>${escHtml(featured.venue || '')}</span>
+                <span><span class="material-symbols-outlined">confirmation_number</span>From ₹${Number(featured.price).toFixed(0)}</span>
+              </div>
+            </div>
+          </div>`;
+
+        /* small cards for the rest */
+        const smIcons = { workshop:'palette', theatre:'theater_comedy', concert:'music_note', sports:'sports', default:'event' };
+        rest.slice(0, 4).forEach(ev => {
+          const iconKey = (ev.type || '').toLowerCase();
+          const icon    = smIcons[iconKey] || smIcons.default;
+          const iconColor = iconKey === 'theatre' ? 'var(--secondary-dim)' : 'var(--primary-dim)';
+
+          if (ev.banner_url && ev.type?.toLowerCase() !== 'workshop') {
+            /* row style for events with images */
+            html += `
+              <div class="event-card-row" onclick="goToEvent(${ev.id})" style="grid-column:1/-1;">
+                <div class="event-card-row-img">
+                  <img src="${ev.banner_url}" alt="${escHtml(ev.title)}" loading="lazy" />
+                </div>
+                <div class="event-card-row-body">
+                  <div class="event-card-row-type">${escHtml(ev.type || '')}</div>
+                  <div class="event-card-row-title">${escHtml(ev.title)}</div>
+                  <div class="event-card-row-meta">
+                    <span><span class="material-symbols-outlined">event</span>${new Date(ev.date).toLocaleDateString('en',{month:'short',day:'numeric'})}</span>
+                    <span><span class="material-symbols-outlined">schedule</span>${ev.time || ''}</span>
+                  </div>
+                </div>
+                <button class="event-card-row-action"><span class="material-symbols-outlined">add</span></button>
+              </div>`;
+          } else {
+            /* small card for workshops / no-banner */
+            html += `
+              <div class="event-card-small" onclick="goToEvent(${ev.id})">
+                <div>
+                  <div class="event-icon-box">
+                    <span class="material-symbols-outlined" style="color:${iconColor};">${icon}</span>
+                  </div>
+                  <div class="event-type-label">${escHtml(ev.type || '')}</div>
+                  <div class="event-title">${escHtml(ev.title)}</div>
+                  <div class="event-desc">${escHtml(ev.description || '')}</div>
+                </div>
+                <div class="event-footer">
+                  <span class="event-price">₹${Number(ev.price).toFixed(0)}</span>
+                  <button class="event-arrow"><span class="material-symbols-outlined">arrow_right_alt</span></button>
+                </div>
+              </div>`;
+          }
+        });
+
+        grid.innerHTML = html;
+
+      } catch (e) {
+        console.warn('Events load failed:', e);
+        document.getElementById('eventsGrid').innerHTML =
+          `<div class="empty-state" style="grid-column:1/-1;"><span class="material-symbols-outlined">error</span>Failed to load events.</div>`;
+      }
+    }
+
+    /* ─────────────────────────────────────────────────
+       TRENDING
+       GET /api/movies/trending
+       Expected: [{ id, title, genres[], duration,
+                    thumbnail_url, trend }]
+       trend: "up" | "flat" | "down" | "top"
+    ───────────────────────────────────────────────── */
+    async function loadTrending() {
+      try {
+        const data = await apiFetch('/movies/trending');
+        const list = document.getElementById('trendingList');
+
+        if (!data || !data.length) {
+          list.innerHTML = `<div class="empty-state"><span class="material-symbols-outlined">trending_up</span>No trending data.</div>`;
+          return;
+        }
+
+        const trendIcon = { up:'trending_up', flat:'trending_flat', down:'trending_down', top:'trending_up' };
+        const trendCls  = { up:'trend-up', flat:'trend-flat', down:'trend-down', top:'trend-up' };
+
+        list.innerHTML = data.slice(0, 5).map((m, i) => {
+          const trend = (m.trend || 'flat').toLowerCase();
+          const isTop = trend === 'top';
+          return `
+            <div class="trending-item" onclick="goToMovie(${m.id})">
+              <span class="trending-rank">${i + 1}</span>
+              <div class="trending-thumb">
+                <img src="${m.thumbnail_url || m.poster_url}" alt="${escHtml(m.title)}" loading="lazy" />
+              </div>
+              <div class="trending-info">
+                <div class="trending-title">${escHtml(m.title)}</div>
+                <div class="trending-meta">${(m.genres || []).join(' • ')} ${m.duration ? '• ' + m.duration : ''}</div>
+              </div>
+              <div class="trending-badge">
+                <span class="material-symbols-outlined ${trendCls[trend] || 'trend-flat'}">${trendIcon[trend] || 'trending_flat'}</span>
+                ${isTop ? `<div class="top-rated-label">TOP RATED</div>` : ''}
+              </div>
+            </div>`;
+        }).join('');
+
+      } catch (e) {
+        console.warn('Trending load failed:', e);
+        document.getElementById('trendingList').innerHTML =
+          `<div class="empty-state"><span class="material-symbols-outlined">error</span>Failed to load trending.</div>`;
+      }
+    }
+
+    /* ─────────────────────────────────────────────────
+       FILTER CHIPS
+    ───────────────────────────────────────────────── */
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.addEventListener('click', async () => {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const filter = chip.dataset.filter;
+        await filterNowShowing(filter);
+      });
+    });
+
+    async function filterNowShowing(filter) {
+      const row = document.getElementById('nowShowingRow');
+      row.innerHTML = `
+        <div class="skeleton-card"><div class="skeleton-poster skeleton-box"></div></div>
+        <div class="skeleton-card"><div class="skeleton-poster skeleton-box"></div></div>
+        <div class="skeleton-card"><div class="skeleton-poster skeleton-box"></div></div>`;
+
+      try {
+        const endpoint = filter === 'all'
+          ? '/movies?status=now_showing'
+          : `/movies?status=now_showing&type=${filter}`;
+        const data = await apiFetch(endpoint);
+
+        if (!data || !data.length) {
+          row.innerHTML = `<div class="empty-state"><span class="material-symbols-outlined">movie</span>No results for "${filter}".</div>`;
+          return;
+        }
+        row.innerHTML = data.map(m => `
+          <div class="movie-card" onclick="goToMovie(${m.id})">
+            <div class="movie-poster">
+              <img src="${m.poster_url}" alt="${escHtml(m.title)}" loading="lazy" />
+              <div class="movie-price-badge">₹${Number(m.price).toFixed(0)}</div>
+            </div>
+            <div class="movie-title">${escHtml(m.title)}</div>
+            <div class="movie-genre">${(m.genres || []).join(' • ')}</div>
+            ${renderStars(m.rating || 0)}
+          </div>`).join('');
+
+      } catch (e) {
+        row.innerHTML = `<div class="empty-state"><span class="material-symbols-outlined">error</span>Failed to load.</div>`;
+      }
+    }
+
+    /* ─────────────────────────────────────────────────
+       SEARCH
+    ───────────────────────────────────────────────── */
+    let searchTimer;
+    document.getElementById('searchInput').addEventListener('input', e => {
+      clearTimeout(searchTimer);
+      const q = e.target.value.trim();
+      if (!q) return;
+      searchTimer = setTimeout(() => {
+        window.location.href = `search.html?q=${encodeURIComponent(q)}`;
+      }, 500);
+    });
+
+    /* ─────────────────────────────────────────────────
+       NAVIGATION HELPERS
+    ───────────────────────────────────────────────── */
+    function goToMovie(id) { window.location.href = `movie-detail.html?id=${id}`; }
+    function goToEvent(id) { window.location.href = `event-detail.html?id=${id}`; }
+    function openTrailer(url) { window.open(url, '_blank'); }
+
+    /* ─────────────────────────────────────────────────
+       SECURITY: escape HTML to prevent XSS
+    ───────────────────────────────────────────────── */
+    function escHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;');
+    }
+
+    /* ─────────────────────────────────────────────────
+       INIT — load all sections in parallel
+    ───────────────────────────────────────────────── */
+    Promise.all([
+      loadHero(),
+      loadNowShowing(),
+      loadEvents(),
+      loadTrending()
+    ]);
+  </script>
+
+</body>
+</html>

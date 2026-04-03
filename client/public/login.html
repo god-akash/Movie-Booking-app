@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CineBook – Sign In</title>
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@700;800;900&family=Manrope:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+  <style>
+    /* ── Reset ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --surface:         #0f0d16;
+      --surface-card:    rgba(39, 36, 49, 0.62);
+      --surface-high:    #211e2a;
+      --surface-highest: #272431;
+      --on-surface:      #f5eefc;
+      --on-surface-var:  #aea9b6;
+      --outline-var:     #494651;
+      --outline:         #78737f;
+      --primary:         #b6a0ff;
+      --primary-dim:     #7e51ff;
+      --secondary:       #00e3fd;
+      --secondary-dim:   #00d4ec;
+      --grad-btn:        linear-gradient(135deg, #7e51ff 0%, #00d4ec 100%);
+      --font-head:       'Epilogue', sans-serif;
+      --font-body:       'Manrope', sans-serif;
+      --font-label:      'Plus Jakarta Sans', sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: var(--surface);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+
+    /* ── Background ───────────────────────────────── */
+    .bg-wrap {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+    .bg-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.35;
+      display: block;
+    }
+    .bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 13, 22, 0.78);
+      backdrop-filter: blur(3px);
+    }
+
+    /* ── Page Shell ───────────────────────────────── */
+    .page {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+    }
+
+    /* ── Header ───────────────────────────────────── */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 28px;
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .logo-icon-wrap {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #7e51ff, #00d4ec);
+      padding: 2px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon-inner {
+      width: 100%; height: 100%;
+      background: var(--surface);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon-inner .material-symbols-outlined {
+      font-size: 20px;
+      color: #00d4ec;
+      font-variation-settings: 'FILL' 1;
+    }
+    .logo-text {
+      font-family: var(--font-head);
+      font-size: 22px; font-weight: 900;
+      background: linear-gradient(90deg, #7e51ff, #00d4ec);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+    .support-btn {
+      background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      color: #94a3b8;
+      font-family: var(--font-label);
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      transition: opacity 0.2s;
+    }
+    .support-btn:hover { opacity: 0.65; }
+    .support-btn .material-symbols-outlined { font-size: 18px; }
+
+    /* ── Main ─────────────────────────────────────── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 16px 32px;
+    }
+    .card-wrap { width: 100%; max-width: 440px; }
+
+    /* ── Glass Card ───────────────────────────────── */
+    .glass-card {
+      background: var(--surface-card);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border: 1px solid rgba(73,70,81,0.18);
+      border-radius: 40px;
+      padding: 40px 38px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(182,160,255,0.06);
+    }
+    .blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(72px); pointer-events: none; z-index: 0;
+    }
+    .blob-tl { top:-80px; left:-80px; width:180px; height:180px; background:rgba(182,160,255,0.10); }
+    .blob-br { bottom:-80px; right:-80px; width:180px; height:180px; background:rgba(0,212,236,0.08); }
+
+    /* everything inside card sits above blobs */
+    .card-header, .msg, .form,
+    .divider, .social-grid, .register-prompt { position: relative; z-index: 1; }
+
+    /* ── Card Header ──────────────────────────────── */
+    .card-header { text-align: center; margin-bottom: 32px; }
+    .card-icons {
+      display: inline-flex; align-items: center; gap: 4px;
+      color: var(--secondary); margin-bottom: 12px;
+    }
+    .card-icons .material-symbols-outlined { font-size: 32px; }
+    .card-title {
+      font-family: var(--font-head);
+      font-size: 30px; font-weight: 800;
+      color: var(--on-surface); margin-bottom: 6px;
+    }
+    .card-sub {
+      font-family: var(--font-label);
+      font-size: 13px; color: var(--on-surface-var);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Message Box ──────────────────────────────── */
+    .msg {
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-family: var(--font-label);
+      font-size: 13px; font-weight: 600;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .msg.error   { background:rgba(255,110,132,0.12); color:#ff6e84; border:1px solid rgba(255,110,132,0.22); }
+    .msg.success { background:rgba(0,227,253,0.10); color:var(--secondary); border:1px solid rgba(0,227,253,0.22); }
+    .msg.show    { display: block; }
+
+    /* ── Form ─────────────────────────────────────── */
+    .form { display: flex; flex-direction: column; gap: 26px; }
+
+    .field-group { position: relative; }
+    .field-group input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(73,70,81,0.38);
+      padding: 12px 36px 12px 0;
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .field-group input:focus { border-bottom-color: var(--primary); }
+    .field-group label {
+      position: absolute;
+      left: 0; top: 12px;
+      color: var(--on-surface-var);
+      font-family: var(--font-label);
+      font-size: 14px;
+      pointer-events: none;
+      transform-origin: left;
+      transition: transform 0.25s ease, color 0.25s ease;
+    }
+    .field-group input:focus + label,
+    .field-group input:not(:placeholder-shown) + label {
+      transform: translateY(-22px) scale(0.82);
+      color: var(--primary);
+    }
+    .eye-btn {
+      position: absolute; right: 0; top: 10px;
+      background: none; border: none; cursor: pointer;
+      color: var(--on-surface-var); transition: color 0.2s;
+      display: flex; align-items: center; padding: 0;
+    }
+    .eye-btn:hover { color: var(--primary); }
+    .eye-btn .material-symbols-outlined { font-size: 22px; }
+
+    .forgot-row { display: flex; justify-content: flex-end; margin-top: -8px; }
+    .forgot-link {
+      font-family: var(--font-label);
+      font-size: 11px; font-weight: 700;
+      color: var(--primary); text-decoration: none;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      transition: color 0.2s;
+    }
+    .forgot-link:hover { color: var(--secondary); }
+
+    /* ── Submit Button ────────────────────────────── */
+    .btn-signin {
+      width: 100%; padding: 15px;
+      border: none; border-radius: 9999px;
+      background: var(--grad-btn);
+      color: #000;
+      font-family: var(--font-head);
+      font-size: 17px; font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(126,81,255,0.32);
+      transition: filter 0.2s, box-shadow 0.2s, transform 0.1s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-signin:hover { filter: saturate(1.25); box-shadow: 0 6px 28px rgba(126,81,255,0.48); }
+    .btn-signin:active { transform: scale(0.97); }
+    .btn-signin:disabled { opacity: 0.6; cursor: not-allowed; filter: none; box-shadow: none; }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(0,0,0,0.2);
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    .btn-signin.loading .spinner { display: block; }
+    .btn-signin.loading .btn-text { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Divider ──────────────────────────────────── */
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 28px 0 20px;
+    }
+    .divider-line { flex: 1; height: 1px; background: rgba(73,70,81,0.15); }
+    .divider-text {
+      font-family: var(--font-label);
+      font-size: 10px; font-weight: 700;
+      color: var(--outline);
+      text-transform: uppercase; letter-spacing: 0.3em;
+    }
+
+    /* ── Social ───────────────────────────────────── */
+    .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .social-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 12px 16px;
+      background: rgba(33,30,42,0.5);
+      border: 1px solid rgba(73,70,81,0.15);
+      border-radius: 14px; cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .social-btn:hover  { background: var(--surface-highest); }
+    .social-btn:active { transform: scale(0.97); }
+    .social-btn img { width: 20px; height: 20px; }
+    .social-btn .material-symbols-outlined { font-size: 20px; color: var(--on-surface-var); }
+    .social-btn .s-label {
+      font-family: var(--font-label);
+      font-size: 12px; font-weight: 700;
+      color: var(--on-surface);
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+
+    /* ── Register Prompt ──────────────────────────── */
+    .register-prompt {
+      text-align: center; margin-top: 28px;
+      font-family: var(--font-body);
+      font-size: 13px; color: var(--on-surface-var);
+    }
+    .register-prompt a {
+      color: var(--secondary); font-weight: 700;
+      text-decoration: none; margin-left: 4px;
+      transition: opacity 0.2s;
+    }
+    .register-prompt a:hover { opacity: 0.75; text-decoration: underline; }
+
+    /* ── Footer ───────────────────────────────────── */
+    footer {
+      text-align: center; padding: 18px;
+      font-family: var(--font-label);
+      font-size: 10px; color: var(--outline);
+      text-transform: uppercase; letter-spacing: 0.4em; opacity: 0.5;
+    }
+
+    /* ── Responsive ───────────────────────────────── */
+    @media (max-width: 480px) {
+      header { padding: 18px 18px; }
+      .glass-card { padding: 32px 22px; border-radius: 28px; }
+      .card-title { font-size: 26px; }
+      .btn-signin { font-size: 15px; padding: 14px; }
+    }
+    @media (max-width: 360px) {
+      .glass-card { padding: 26px 16px; border-radius: 24px; }
+      .social-grid { grid-template-columns: 1fr; }
+      .card-title { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background -->
+  <div class="bg-wrap">
+    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDL82QytyYjHABmREAVNWdUHZEW9BXDB_LChpcIAw2HxYP3_qSdV_DsDD0L7APsnvftNXROW8Ulr6AF1VaYIXFw2tvuKnLv9-hDe9O_sGarE-bGOGyrfA_bLE6nOflYNgaVWMIkdztJ9vfSyVJuKOmvyTeUOED2fz51Mn3bbS71hzSd8Vgrk-amow2RoR6xjOGYxxqr0xxdNPj0pRF2k2AtCe0Pd3LKuqUuf7DA5_oGvN7fmvepiwp35yzshZ-nyWu-Ort9JTUTDF4" alt="bg"/>
+    <div class="bg-overlay"></div>
+  </div>
+
+  <div class="page">
+
+    <!-- Header -->
+    <header>
+      <a class="logo" href="#">
+        <div class="logo-icon-wrap">
+          <div class="logo-icon-inner">
+            <span class="material-symbols-outlined">movie_filter</span>
+          </div>
+        </div>
+        <span class="logo-text">CineBook</span>
+      </a>
+      <button class="support-btn">
+        <span class="material-symbols-outlined">help_outline</span>
+        <span>Support</span>
+      </button>
+    </header>
+
+    <!-- Main -->
+    <main>
+      <div class="card-wrap">
+        <div class="glass-card">
+          <div class="blob blob-tl"></div>
+          <div class="blob blob-br"></div>
+
+          <!-- Card Header -->
+          <div class="card-header">
+            <div class="card-icons">
+              <span class="material-symbols-outlined">confirmation_number</span>
+              <span class="material-symbols-outlined">theaters</span>
+            </div>
+            <h2 class="card-title">Welcome Back</h2>
+            <p class="card-sub">Enter the realm of stories</p>
+          </div>
+
+          <!-- Message Box -->
+          <div class="msg" id="msg"></div>
+
+          <!-- Form -->
+          <form class="form" id="loginForm" novalidate>
+
+            <!-- Email -->
+            <div class="field-group">
+              <input type="email" id="email" placeholder=" " autocomplete="email" required />
+              <label for="email">Email Address</label>
+            </div>
+
+            <!-- Password -->
+            <div class="field-group">
+              <input type="password" id="password" placeholder=" " autocomplete="current-password" required />
+              <label for="password">Password</label>
+              <button type="button" class="eye-btn" id="eyeBtn" aria-label="Toggle password visibility">
+                <span class="material-symbols-outlined" id="eyeIcon">visibility</span>
+              </button>
+            </div>
+
+            <!-- Forgot Password -->
+            <div class="forgot-row">
+              <a href="forgot-password.html" class="forgot-link">Forgot Password?</a>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn-signin" id="signinBtn">
+              <div class="spinner"></div>
+              <span class="btn-text">Sign In</span>
+            </button>
+
+          </form>
+
+          <!-- Divider -->
+          <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-text">or</span>
+            <div class="divider-line"></div>
+          </div>
+
+          <!-- Social Buttons -->
+          <div class="social-grid">
+            <button class="social-btn" type="button">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAX2bAhI3vnbF8xpgORchDcI9anR41_MtqjXVIWZeG1iLolqiokCfyFYfPtvwKX0_lnumCzLrCSwbODNUeSMJxMdFw2ONZJyjrdv9WSOoBdDDkfcuZPmd_4eq6v-WmAiy24ybSEetDRpKZGR_JmPsMr4XV0DH59jJjE2x5hOBKOCwL2EdTqHR6wZEXrNgZbB3gNZkKucpk8ohhvVx7ScNC2WfMtIurgYlMCOfCQzlKnXXN2yUVwslZUmiW86GB_2thWn7Fo7ZgrL-Y" alt="Google" />
+              <span class="s-label">Google</span>
+            </button>
+            <button class="social-btn" type="button">
+              <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">ios</span>
+              <span class="s-label">Apple</span>
+            </button>
+          </div>
+
+          <!-- Register Link -->
+          <p class="register-prompt">
+            Don't have an account?
+            <a href="register.html">Create Account</a>
+          </p>
+
+        </div>
+      </div>
+    </main>
+
+    <footer>© 2024 CineBook Premium Cinema Experience</footer>
+  </div>
+
+  <script>
+    /* ─────────────────────────────────────────────────
+       CONFIG — change this to your backend base URL
+    ───────────────────────────────────────────────── */
+    const API_BASE = 'http://localhost:5000/api';
+
+    /* ── DOM refs ─────────────────────────────────── */
+    const loginForm  = document.getElementById('loginForm');
+    const emailEl    = document.getElementById('email');
+    const passwordEl = document.getElementById('password');
+    const eyeBtn     = document.getElementById('eyeBtn');
+    const eyeIcon    = document.getElementById('eyeIcon');
+    const signinBtn  = document.getElementById('signinBtn');
+    const msgBox     = document.getElementById('msg');
+
+    /* ── Eye toggle ───────────────────────────────── */
+    eyeBtn.addEventListener('click', () => {
+      const isPass = passwordEl.type === 'password';
+      passwordEl.type     = isPass ? 'text' : 'password';
+      eyeIcon.textContent = isPass ? 'visibility_off' : 'visibility';
+    });
+
+    /* ── Message helpers ──────────────────────────── */
+    function showMsg(text, type = 'error') {
+      msgBox.textContent = text;
+      msgBox.className   = `msg ${type} show`;
+    }
+    function hideMsg() { msgBox.className = 'msg'; }
+
+    /* ── Loading state ────────────────────────────── */
+    function setLoading(on) {
+      signinBtn.disabled = on;
+      signinBtn.classList.toggle('loading', on);
+    }
+
+    /* ── Client-side validation ───────────────────── */
+    function validate() {
+      const email = emailEl.value.trim();
+      const pass  = passwordEl.value;
+      if (!email) {
+        showMsg('Please enter your email address.'); return false;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showMsg('Please enter a valid email address.'); return false;
+      }
+      if (!pass) {
+        showMsg('Please enter your password.'); return false;
+      }
+      if (pass.length < 6) {
+        showMsg('Password must be at least 6 characters.'); return false;
+      }
+      return true;
+    }
+
+    /* ── Form submit → API call ───────────────────── */
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideMsg();
+      if (!validate()) return;
+
+      const email    = emailEl.value.trim();
+      const password = passwordEl.value;
+
+      setLoading(true);
+
+      try {
+        const res = await fetch(`${API_BASE}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          /* ── Save token & user ── */
+          if (data.token) localStorage.setItem('cinebook_token', data.token);
+          if (data.user)  localStorage.setItem('cinebook_user', JSON.stringify(data.user));
+
+          showMsg('Login successful! Redirecting…', 'success');
+
+          /* ── Redirect based on role ── */
+          setTimeout(() => {
+            const role = data.user?.role;
+            window.location.href = (role === 'admin') ? 'admin.html' : 'home.html';
+          }, 1200);
+
+        } else {
+          showMsg(data.message || 'Invalid email or password. Please try again.');
+        }
+
+      } catch (err) {
+        console.error('Login error:', err);
+        showMsg('Unable to connect to server. Please check your connection.');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    /* ── Clear message on typing ──────────────────── */
+    emailEl.addEventListener('input', hideMsg);
+    passwordEl.addEventListener('input', hideMsg);
+
+    /* ── Auto-redirect if already logged in ──────── */
+    (function checkSession() {
+      const token = localStorage.getItem('cinebook_token');
+      if (token) window.location.href = 'home.html';
+    })();
+  </script>
+
+</body>
+</html>
