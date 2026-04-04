@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CineBook – Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700;800&family=Manrope:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:               #0c0a14;
+      --surface:          #141120;
+      --surface-card:     #1b1828;
+      --surface-card-alt: #211e2e;
+      --surface-hover:    #252237;
+      --on-surface:       #f5eefc;
+      --on-surface-dim:   #aea9b6;
+      --primary:          #b6a0ff;
+      --primary-dim:      #7e51ff;
+      --secondary:        #00e3fd;
+      --secondary-dim:    #00849b;
+      --error:            #ff6e84;
+      --success:          #00d68f;
+      --warning:          #ffb547;
+      --outline:          #3d3a4a;
+      --radius:           14px;
+      --radius-sm:        8px;
+      --radius-xs:        6px;
+      --font-body:        'Plus Jakarta Sans', 'Manrope', sans-serif;
+      --font-heading:     'Epilogue', sans-serif;
+      --shadow:           0 8px 32px rgba(0,0,0,.35);
+    }
+    html { background: var(--bg); color: var(--on-surface); font-family: var(--font-body); }
+    body { display: flex; min-height: 100vh; overflow-x: hidden; }
+
+    /* ── Sidebar ── */
+    .sidebar { 
+      width: 260px; min-height: 100vh; background: var(--surface); border-right: 1px solid var(--outline);
+      padding: 24px 16px; display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100;
+    }
+    .sidebar-logo { display: flex; align-items: center; gap: 10px; font-family: var(--font-heading); font-weight: 800; font-size: 22px; color: var(--primary); margin-bottom: 36px; text-decoration: none; }
+    .sidebar-logo .material-symbols-outlined { font-size: 28px; color: var(--secondary); }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .nav-link {
+      display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radius-sm);
+      color: var(--on-surface-dim); text-decoration: none; font-weight: 500; font-size: 14px; transition: all .2s;
+    }
+    .nav-link:hover { background: var(--surface-hover); color: var(--on-surface); }
+    .nav-link.active { background: linear-gradient(135deg, rgba(182,160,255,.12), rgba(0,227,253,.06)); color: var(--primary); font-weight: 600; }
+    .nav-link .material-symbols-outlined { font-size: 22px; }
+    .sidebar-bottom { border-top: 1px solid var(--outline); padding-top: 16px; margin-top: auto; }
+    .sidebar-user { display: flex; align-items: center; gap: 12px; padding: 8px 6px; }
+    .sidebar-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary-dim); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+    .sidebar-user-info { flex: 1; }
+    .sidebar-user-name { font-weight: 600; font-size: 13px; }
+    .sidebar-user-role { font-size: 11px; color: var(--on-surface-dim); }
+
+    /* ── Main Content ── */
+    .main { flex: 1; margin-left: 260px; padding: 28px 32px; background: var(--bg); }
+    .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+    .top-bar h1 { font-family: var(--font-heading); font-size: 26px; font-weight: 800; }
+    .top-bar-right { display: flex; align-items: center; gap: 12px; }
+    .btn-outline { 
+      display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: var(--radius-sm); 
+      border: 1px solid var(--outline); background: transparent; color: var(--on-surface-dim); font-size: 13px; 
+      font-weight: 500; cursor: pointer; transition: all .2s;
+    }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-primary { 
+      display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: var(--radius-sm);
+      border: none; background: linear-gradient(135deg, var(--primary-dim), var(--primary)); color: #fff; font-size: 13px;
+      font-weight: 600; cursor: pointer; transition: all .2s;
+    }
+    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+    /* ── KPI Cards ── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 28px; }
+    .kpi-card {
+      background: var(--surface-card); border: 1px solid var(--outline); border-radius: var(--radius); padding: 22px;
+      position: relative; overflow: hidden; transition: transform .2s, box-shadow .2s;
+    }
+    .kpi-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .kpi-card::after {
+      content: ''; position: absolute; top: 0; right: 0; width: 80px; height: 80px; border-radius: 50%;
+      filter: blur(40px); opacity: .15;
+    }
+    .kpi-card:nth-child(1)::after { background: var(--primary); }
+    .kpi-card:nth-child(2)::after { background: var(--secondary); }
+    .kpi-card:nth-child(3)::after { background: var(--warning); }
+    .kpi-card:nth-child(4)::after { background: var(--success); }
+    .kpi-label { font-size: 12px; color: var(--on-surface-dim); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+    .kpi-value { font-family: var(--font-heading); font-size: 28px; font-weight: 800; margin-bottom: 6px; }
+    .kpi-change { font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 3px; }
+    .kpi-change.up { color: var(--success); }
+    .kpi-change.down { color: var(--error); }
+
+    /* ── Charts Area ── */
+    .charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 18px; margin-bottom: 28px; }
+    .card {
+      background: var(--surface-card); border: 1px solid var(--outline); border-radius: var(--radius); padding: 22px;
+    }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .card-title { font-family: var(--font-heading); font-size: 16px; font-weight: 700; }
+    .chart-mode-btns { display: flex; gap: 4px; }
+    .chart-mode-btn {
+      padding: 5px 14px; border-radius: 20px; border: 1px solid var(--outline); background: transparent;
+      color: var(--on-surface-dim); font-size: 12px; cursor: pointer; transition: all .2s;
+    }
+    .chart-mode-btn.active { background: var(--primary-dim); border-color: var(--primary-dim); color: #fff; }
+    .chart-bars { display: flex; align-items: flex-end; gap: 10px; height: 180px; padding-top: 10px; }
+    .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .bar {
+      width: 100%; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, var(--primary), var(--primary-dim));
+      transition: height .6s cubic-bezier(.4,0,.2,1); min-height: 4px; cursor: pointer; position: relative;
+    }
+    .bar.peak { background: linear-gradient(180deg, var(--secondary), var(--secondary-dim)); }
+    .bar-label { font-size: 11px; color: var(--on-surface-dim); }
+
+    /* ── Top Shows ── */
+    .top-show-item { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--outline); }
+    .top-show-item:last-child { border-bottom: none; }
+    .top-show-rank { 
+      width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 13px; background: rgba(182,160,255,.1); color: var(--primary);
+    }
+    .top-show-info { flex: 1; }
+    .top-show-name { font-size: 14px; font-weight: 600; }
+    .top-show-venue { font-size: 11px; color: var(--on-surface-dim); }
+    .top-show-occ { font-size: 14px; font-weight: 700; color: var(--success); }
+
+    /* ── Bookings Table ── */
+    .table-card { background: var(--surface-card); border: 1px solid var(--outline); border-radius: var(--radius); overflow: hidden; }
+    .table-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid var(--outline); }
+    .table-header h3 { font-family: var(--font-heading); font-size: 16px; font-weight: 700; }
+    .table-search {
+      padding: 8px 14px; border-radius: 20px; border: 1px solid var(--outline); background: var(--surface);
+      color: var(--on-surface); font-size: 13px; width: 240px;
+    }
+    .table-search:focus { outline: none; border-color: var(--primary); }
+    table { width: 100%; border-collapse: collapse; }
+    thead th { padding: 12px 16px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--on-surface-dim); background: var(--surface); border-bottom: 1px solid var(--outline); }
+    tbody td { padding: 14px 16px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,.04); }
+    tbody tr:hover { background: var(--surface-hover); }
+    .status-badge {
+      display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: capitalize;
+    }
+    .status-badge.confirmed { background: rgba(0,214,143,.12); color: var(--success); }
+    .status-badge.pending { background: rgba(255,181,71,.12); color: var(--warning); }
+    .status-badge.cancelled { background: rgba(255,110,132,.12); color: var(--error); }
+    .action-btn {
+      width: 30px; height: 30px; border-radius: 6px; border: 1px solid var(--outline); background: transparent;
+      color: var(--on-surface-dim); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all .15s;
+    }
+    .action-btn:hover { border-color: var(--error); color: var(--error); }
+    .action-btn .material-symbols-outlined { font-size: 16px; }
+
+    /* ── Loading ── */
+    .skeleton { background: linear-gradient(90deg, var(--surface-card-alt) 25%, var(--surface-hover) 50%, var(--surface-card-alt) 75%); background-size: 400% 100%; animation: shimmer 1.5s infinite; border-radius: var(--radius-sm); }
+    @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+    .toast {
+      position: fixed; bottom: 20px; right: 20px; padding: 14px 24px; border-radius: var(--radius-sm);
+      background: var(--surface-card); border: 1px solid var(--outline); color: var(--on-surface);
+      font-size: 13px; transform: translateY(100px); opacity: 0; transition: all .3s; z-index: 999;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    @media(max-width:900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 18px; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .charts-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ Sidebar ══ -->
+  <aside class="sidebar">
+    <a href="index.html" class="sidebar-logo">
+      <span class="material-symbols-outlined">movie_filter</span> CineBook
+    </a>
+    <nav class="sidebar-nav">
+      <a class="nav-link active" href="#"><span class="material-symbols-outlined">dashboard</span> Dashboard</a>
+      <a class="nav-link" href="#bookings-table"><span class="material-symbols-outlined">confirmation_number</span> Bookings</a>
+      <a class="nav-link" href="index.html"><span class="material-symbols-outlined">movie</span> Movies</a>
+      <a class="nav-link" href="#"><span class="material-symbols-outlined">calendar_today</span> Shows</a>
+      <a class="nav-link" href="#"><span class="material-symbols-outlined">group</span> Users</a>
+      <a class="nav-link" href="#"><span class="material-symbols-outlined">analytics</span> Analytics</a>
+      <a class="nav-link" href="#"><span class="material-symbols-outlined">settings</span> Settings</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar" id="adminAvatar">CA</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="adminName">Cinema Admin</div>
+          <div class="sidebar-user-role">Administrator</div>
+        </div>
+      </div>
+      <button class="nav-link" id="logoutBtn" style="width:100%;cursor:pointer;margin-top:8px;border:none;">
+        <span class="material-symbols-outlined">logout</span> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- ══ Main ══ -->
+  <div class="main">
+    <div class="top-bar">
+      <h1>Dashboard</h1>
+      <div class="top-bar-right">
+        <button class="btn-outline" id="refreshBtn">
+          <span class="material-symbols-outlined" style="font-size:18px">refresh</span> Refresh
+        </button>
+        <button class="btn-primary" id="newShowBtn">
+          <span class="material-symbols-outlined" style="font-size:18px">add</span> New Show
+        </button>
+      </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid" id="kpiGrid">
+      <div class="kpi-card"><div class="kpi-label">Total Revenue</div><div class="kpi-value" id="kpiRevenue">—</div><div class="kpi-change up" id="kpiRevenueChange">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Today's Bookings</div><div class="kpi-value" id="kpiBookings">—</div><div class="kpi-change up" id="kpiBookingsChange">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Active Shows</div><div class="kpi-value" id="kpiShows">—</div><div class="kpi-change" id="kpiShowsSub">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Total Users</div><div class="kpi-value" id="kpiUsers">—</div><div class="kpi-change up" id="kpiUsersChange">—</div></div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-row">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Revenue Overview</span>
+          <div class="chart-mode-btns">
+            <button class="chart-mode-btn active" data-mode="weeks">Weeks</button>
+            <button class="chart-mode-btn" data-mode="days">Days</button>
+          </div>
+        </div>
+        <div class="chart-bars" id="chartBars"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Top Shows Today</span></div>
+        <div id="topShowsList"></div>
+      </div>
+    </div>
+
+    <!-- Bookings Table -->
+    <div class="table-card" id="bookings-table">
+      <div class="table-header">
+        <h3>Recent Bookings</h3>
+        <input type="text" class="table-search" id="bookingSearch" placeholder="Search bookings..." />
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Customer</th>
+              <th>Movie</th>
+              <th>Seats</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="bookingsTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- ══ Script ══ -->
+  <script>
+    const API_BASE = 'http://localhost:5000/api';
+    function getToken() { return localStorage.getItem('cinebook_token'); }
+    function getUser() { try { return JSON.parse(localStorage.getItem('cinebook_user')); } catch { return null; } }
+
+    (function guard() {
+      const token = getToken();
+      const user = getUser();
+      if (!token) { window.location.href = 'login.html'; return; }
+      if (!user || user.role !== 'admin') { window.location.href = 'index.html'; return; }
+    })();
+
+    async function apiFetch(endpoint, opts = {}) {
+      const res = await fetch(`${API_BASE}${endpoint}`, {
+        ...opts,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getToken()}`,
+          ...(opts.headers || {})
+        }
+      });
+      if (res.status === 401) { window.location.href = 'login.html'; return; }
+      return res;
+    }
+
+    // ── Set admin name ──
+    const user = getUser();
+    if (user) {
+      document.getElementById('adminName').textContent = user.name || 'Admin';
+      document.getElementById('adminAvatar').textContent = (user.name || 'A').charAt(0).toUpperCase();
+    }
+
+    // ── Logout ──
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('cinebook_token');
+      localStorage.removeItem('cinebook_user');
+      window.location.href = 'login.html';
+    });
+
+    // ── Load Stats ──
+    async function loadStats() {
+      try {
+        const res = await apiFetch('/admin/stats');
+        const d = await res.json();
+        document.getElementById('kpiRevenue').textContent = `₹${(d.revenue?.value || 0).toLocaleString()}`;
+        document.getElementById('kpiRevenueChange').innerHTML = `<span class="material-symbols-outlined" style="font-size:14px">trending_up</span> ${d.revenue?.change || 0}%`;
+        document.getElementById('kpiBookings').textContent = d.bookings?.today || 0;
+        document.getElementById('kpiBookingsChange').innerHTML = `<span class="material-symbols-outlined" style="font-size:14px">trending_up</span> ${d.bookings?.change || 0}%`;
+        document.getElementById('kpiShows').textContent = d.shows?.active || 0;
+        document.getElementById('kpiShowsSub').textContent = `${d.shows?.screensLive || 0} screens live`;
+        document.getElementById('kpiUsers').textContent = (d.users?.total || 0).toLocaleString();
+        document.getElementById('kpiUsersChange').innerHTML = `<span class="material-symbols-outlined" style="font-size:14px">trending_up</span> ${d.users?.change || 0}%`;
+      } catch (err) { console.error('Stats error:', err); }
+    }
+
+    // ── Load Chart ──
+    async function loadChart(mode = 'weeks') {
+      try {
+        const res = await apiFetch(`/admin/revenue-chart?mode=${mode}`);
+        const d = await res.json();
+        const container = document.getElementById('chartBars');
+        container.innerHTML = '';
+        const chart = d.chart;
+        chart.labels.forEach((label, i) => {
+          const col = document.createElement('div');
+          col.className = 'bar-col';
+          const bar = document.createElement('div');
+          bar.className = `bar${i === chart.peak ? ' peak' : ''}`;
+          bar.style.height = `${chart.heights[i]}%`;
+          bar.title = `₹${(chart.values[i] || 0).toLocaleString()}`;
+          const lbl = document.createElement('div');
+          lbl.className = 'bar-label';
+          lbl.textContent = label;
+          col.appendChild(bar);
+          col.appendChild(lbl);
+          container.appendChild(col);
+        });
+      } catch (err) { console.error('Chart error:', err); }
+    }
+
+    // ── Chart Mode Toggle ──
+    document.querySelectorAll('.chart-mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.chart-mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        loadChart(btn.dataset.mode);
+      });
+    });
+
+    // ── Top Shows ──
+    async function loadTopShows() {
+      try {
+        const res = await apiFetch('/admin/top-shows');
+        const d = await res.json();
+        const container = document.getElementById('topShowsList');
+        container.innerHTML = (d.shows || []).map(s => `
+          <div class="top-show-item">
+            <div class="top-show-rank">${s.rank}</div>
+            <div class="top-show-info">
+              <div class="top-show-name">${esc(s.name)}</div>
+              <div class="top-show-venue">${esc(s.venue || '')}</div>
+            </div>
+            <div class="top-show-occ">${s.occ}%</div>
+          </div>
+        `).join('');
+      } catch (err) { console.error('Top shows error:', err); }
+    }
+
+    // ── Bookings Table ──
+    let allBookings = [];
+    async function loadBookings() {
+      try {
+        const res = await apiFetch('/admin/bookings');
+        const d = await res.json();
+        allBookings = d.bookings || [];
+        renderBookings(allBookings);
+      } catch (err) { console.error('Bookings error:', err); }
+    }
+
+    function renderBookings(list) {
+      const tbody = document.getElementById('bookingsTbody');
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--on-surface-dim)">No bookings found</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map(b => `
+        <tr>
+          <td style="font-weight:600;color:var(--primary)">${esc(b.booking_ref)}</td>
+          <td>${esc(b.user_name)}</td>
+          <td>${esc(b.movie_title)}</td>
+          <td>${Array.isArray(b.seats) ? b.seats.join(', ') : b.seats}</td>
+          <td style="font-weight:600">₹${Number(b.total_amount).toLocaleString()}</td>
+          <td><span class="status-badge ${b.status}">${b.status}</span></td>
+          <td>
+            <button class="action-btn" title="Delete" onclick="deleteBooking('${esc(b.booking_ref)}')">
+              <span class="material-symbols-outlined">delete</span>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // ── Search ──
+    document.getElementById('bookingSearch').addEventListener('input', e => {
+      const q = e.target.value.toLowerCase();
+      const filtered = allBookings.filter(b =>
+        (b.booking_ref || '').toLowerCase().includes(q) ||
+        (b.user_name || '').toLowerCase().includes(q) ||
+        (b.movie_title || '').toLowerCase().includes(q)
+      );
+      renderBookings(filtered);
+    });
+
+    // ── Delete ──
+    async function deleteBooking(ref) {
+      if (!confirm('Delete this booking?')) return;
+      try {
+        await apiFetch(`/admin/bookings/${ref}`, { method: 'DELETE' });
+        showToast('Booking deleted');
+        loadBookings();
+      } catch (err) { showToast('Failed to delete'); }
+    }
+
+    // ── Refresh ──
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      loadStats(); loadChart(); loadTopShows(); loadBookings();
+      showToast('Dashboard refreshed');
+    });
+
+    // ── Utils ──
+    function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+    let toastTimer;
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+    }
+
+    // ── Init ──
+    loadStats();
+    loadChart('weeks');
+    loadTopShows();
+    loadBookings();
+  </script>
+</body>
+</html>

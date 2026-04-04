@@ -482,7 +482,7 @@
       <!-- Sign In link -->
       <p class="signin-footer">
         Already have an account?
-        <a href="login.html">Sign In</a>
+        <a href="login.html">Log In</a>
       </p>
     </div>
 
@@ -495,12 +495,8 @@
   </div>
 
   <script>
-    /* ─────────────────────────────────────────────────
-       CONFIG
-    ───────────────────────────────────────────────── */
     const API_BASE = 'http://localhost:5000/api';
 
-    /* ── DOM refs ─────────────────────────────────── */
     const form            = document.getElementById('registerForm');
     const fullnameEl      = document.getElementById('fullname');
     const emailEl         = document.getElementById('email');
@@ -511,7 +507,6 @@
     const registerBtn     = document.getElementById('registerBtn');
     const msgBox          = document.getElementById('msg');
 
-    /* ── Eye toggles ──────────────────────────────── */
     function makeEyeToggle(btnId, iconId, inputEl) {
       document.getElementById(btnId).addEventListener('click', () => {
         const isPass = inputEl.type === 'password';
@@ -522,7 +517,6 @@
     makeEyeToggle('eyeBtn1', 'eyeIcon1', passwordEl);
     makeEyeToggle('eyeBtn2', 'eyeIcon2', confirmPassEl);
 
-    /* ── Password strength ────────────────────────── */
     const bars   = [1,2,3,4].map(i => document.getElementById(`bar${i}`));
     const label  = document.getElementById('strengthLabel');
 
@@ -564,7 +558,6 @@
       }
     });
 
-    /* ── Message helpers ──────────────────────────── */
     function showMsg(text, type = 'error') {
       msgBox.textContent = text;
       msgBox.className   = `msg ${type} show`;
@@ -572,13 +565,11 @@
     }
     function hideMsg() { msgBox.className = 'msg'; }
 
-    /* ── Loading state ────────────────────────────── */
     function setLoading(on) {
       registerBtn.disabled = on;
       registerBtn.classList.toggle('loading', on);
     }
 
-    /* ── Validation ───────────────────────────────── */
     function validate() {
       const name    = fullnameEl.value.trim();
       const email   = emailEl.value.trim();
@@ -607,7 +598,7 @@
       return true;
     }
 
-    /* ── Submit → API ─────────────────────────────── */
+    /* ──  API CALL ─────────────────────────────── */
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       hideMsg();
@@ -632,12 +623,11 @@
         const data = await res.json();
 
         if (res.ok) {
-          /* save token if returned immediately */
           if (data.token) localStorage.setItem('cinebook_token', data.token);
           if (data.user)  localStorage.setItem('cinebook_user', JSON.stringify(data.user));
 
           showMsg('Account created! Redirecting to login…', 'success');
-          setTimeout(() => { window.location.href = 'login.html'; }, 1400);
+          setTimeout(() => { window.location.href = 'index.html'; }, 1400);
 
         } else {
           showMsg(data.message || 'Registration failed. Please try again.');
@@ -651,7 +641,6 @@
       }
     });
 
-    /* ── Clear msg on any input ───────────────────── */
     [fullnameEl, emailEl, phoneEl, passwordEl, confirmPassEl].forEach(el => {
       el.addEventListener('input', hideMsg);
     });

@@ -85,7 +85,6 @@
       border-radius: 12px;
       background: linear-gradient(135deg, #7e51ff, #00d4ec);
       padding: 2px;
-      display: flex; align-items: center; justify-content: center;
     }
     .logo-icon-inner {
       width: 100%; height: 100%;
@@ -347,7 +346,7 @@
       <a class="logo" href="#">
         <div class="logo-icon-wrap">
           <div class="logo-icon-inner">
-            <span class="material-symbols-outlined">movie_filter</span>
+            <span class="material-symbols-outlined">movie</span>
           </div>
         </div>
         <span class="logo-text">CineBook</span>
@@ -368,8 +367,7 @@
           <!-- Card Header -->
           <div class="card-header">
             <div class="card-icons">
-              <span class="material-symbols-outlined">confirmation_number</span>
-              <span class="material-symbols-outlined">theaters</span>
+              <span class="material-symbols-outlined">movie</span>
             </div>
             <h2 class="card-title">Welcome Back</h2>
             <p class="card-sub">Enter the realm of stories</p>
@@ -525,7 +523,7 @@
           /* ── Redirect based on role ── */
           setTimeout(() => {
             const role = data.user?.role;
-            window.location.href = (role === 'admin') ? 'admin.html' : 'home.html';
+            window.location.href = (role === 'admin') ? 'admin.html' : 'index.html';
           }, 1200);
 
         } else {
@@ -547,7 +545,7 @@
     /* ── Auto-redirect if already logged in ──────── */
     (function checkSession() {
       const token = localStorage.getItem('cinebook_token');
-      if (token) window.location.href = 'home.html';
+      if (token) window.location.href = 'index.html';
     })();
   </script>
 

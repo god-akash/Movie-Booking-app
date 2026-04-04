@@ -533,6 +533,7 @@
       display: -webkit-box;
       -webkit-line-clamp: 2; -webkit-box-orient: vertical;
       overflow: hidden;
+      line-clamp: 2;
     }
     .event-footer {
       display: flex; justify-content: space-between;
@@ -765,7 +766,7 @@
   ══════════════════════════════════════ -->
   <header class="top-nav">
     <!-- Logo → home.html -->
-    <a class="nav-logo" href="home.html">
+    <a class="nav-logo" href="index.html">
       <span class="material-symbols-outlined">movie_filter</span>
       <span class="nav-logo-text">CineBook</span>
     </a>
@@ -891,12 +892,12 @@
   ══════════════════════════════════════ -->
   <nav class="bottom-nav">
     <!-- Movies → home.html  [ACTIVE] -->
-    <a class="nav-item active" href="home.html">
+    <a class="nav-item active" href="index.html">
       <span class="material-symbols-outlined">movie</span>
       <span class="nav-label">Movies</span>
     </a>
     <!-- Tickets → tickets.html -->
-    <a class="nav-item" href="tickets.html">
+    <a class="nav-item" href="dashboard.html">
       <span class="material-symbols-outlined">confirmation_number</span>
       <span class="nav-label">Tickets</span>
     </a>
@@ -906,7 +907,7 @@
       <span class="nav-label">Search</span>
     </a>
     <!-- Profile → profile.html -->
-    <a class="nav-item" href="profile.html">
+    <a class="nav-item" href="dashboard.html">
       <span class="material-symbols-outlined">person</span>
       <span class="nav-label">Profile</span>
     </a>
@@ -1335,7 +1336,7 @@
     /* ─────────────────────────────────────────────────
        NAVIGATION HELPERS
     ───────────────────────────────────────────────── */
-    function goToMovie(id) { window.location.href = `movie-detail.html?id=${id}`; }
+    function goToMovie(id) { window.location.href = `Movie-details.html?id=${id}`; }
     function goToEvent(id) { window.location.href = `event-detail.html?id=${id}`; }
     function openTrailer(url) { window.open(url, '_blank'); }
 
