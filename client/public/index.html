@@ -784,7 +784,7 @@
         <span class="material-symbols-outlined">notifications</span>
       </button>
       <!-- User avatar → profile.html -->
-      <div class="nav-avatar" onclick="window.location.href='profile.html'" id="navAvatar">
+      <div class="nav-avatar" onclick="window.location.href='dashboard.html'" id="navAvatar">
         <div class="nav-avatar-placeholder" id="avatarInitials">?</div>
       </div>
     </div>
@@ -793,6 +793,7 @@
   <!-- ══════════════════════════════════════
        MAIN CONTENT
   ══════════════════════════════════════ -->
+  
   <main>
 
     <!-- ── HERO SLIDER ──────────────────────
@@ -943,6 +944,7 @@
     (function guardAuth() {
       if (!getToken()) window.location.href = 'login.html';
     })();
+    //change it to login.html later 
 
     /* ── User avatar / initials in nav ───────────── */
     (function loadUserAvatar() {
