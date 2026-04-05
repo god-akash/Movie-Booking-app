@@ -1,6 +1,6 @@
 
 
-USE railway
+USE railway;
 
 -- ── Users ────────────────────────────────
 CREATE TABLE IF NOT EXISTS users (

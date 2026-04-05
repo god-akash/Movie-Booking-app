@@ -1,7 +1,7 @@
 -- ============================================
 -- CineBook Seed Data
 -- ============================================
-USE cinebook;
+USE railway;
 
 -- ── Admin user (password: admin123) ──────
 INSERT INTO users (name, email, phone, password, role) VALUES
