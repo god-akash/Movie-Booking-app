@@ -906,6 +906,9 @@
   /* ────────────────────────────────────────
      AUTH & CONFIG
   ──────────────────────────────────────── */
+  
+  const API_BASE = 'https://movie-booking-app-production-cfa6.up.railway.app/api';
+
   function getToken() { return localStorage.getItem('cinebook_token'); }
   (function guardAuth() {
     if (!getToken()) window.location.href = 'login.html';
@@ -949,7 +952,7 @@
   ──────────────────────────────────────── */
 
   async function api_getSeats(showId) {
-    const res = await fetch(`/api/shows/${showId}/seats`, {
+    const res = await fetch(`${API_BASE}/shows/${showId}/seats`, {
       headers: { 'Authorization': 'Bearer ' + getToken() }
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -957,7 +960,7 @@
   }
 
   async function api_createBooking(showId, seats) {
-    const res = await fetch('/api/bookings', {
+    const res = await fetch(`${API_BASE}/bookings`, {
       method: 'POST',
       headers: {
         'Content-Type':  'application/json',
@@ -1249,7 +1252,7 @@
   document.addEventListener('DOMContentLoaded', init);
 
   window.addEventListener('beforeunload', () => {
-    navigator.sendBeacon('/api/bookings/release', JSON.stringify({ seats: [...selectedSeats] }));
+    navigator.sendBeacon(`${API_BASE}/bookings/release`, JSON.stringify({ seats: [...selectedSeats] }));
   });
 </script>
 
