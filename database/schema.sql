@@ -1,9 +1,7 @@
--- ============================================
--- CineBook Database Schema
--- ============================================
+
 
 CREATE DATABASE IF NOT EXISTS cinebook;
-USE cinebook;
+USE railway;
 
 -- ── Users ────────────────────────────────
 CREATE TABLE IF NOT EXISTS users (
