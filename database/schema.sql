@@ -1,6 +1,5 @@
 
 
-CREATE DATABASE IF NOT EXISTS cinebook;
 USE railway;
 
 -- ── Users ────────────────────────────────
